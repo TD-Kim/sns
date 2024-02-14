@@ -13,6 +13,58 @@ gitignore.io 들어가서 intellij 관련 세개 추가, java, gradle 추가해�
 
 6. 스프링부트 프로젝트 실행하면 오류가남(자바 11버전으로 변경 안된것, DB 연동 url 없는것)
     SnsApplication.java 파일에 @SpringBootApplication(exclude = DataSourceAutoConfiguration.class) 수정해주고 build.gradle 에
-    spring boot 버전 2.7.6, java 11 로 변경 후 Run application  다시 해본다.
+    spring boot 버전 2.6.7, java 11 로 변경 후 Run application  다시 해본다.
 
 7. 성공하면 localhost:8080 들어가면 로그인 페이지가 뜨는데 스프링 시큐리티를 설정해놨기 때문에 모든 경로에 대해서 로그인을 하라고 자동으로 뜨기 때문
+
+8. build.gradle plugins 부분에
+    id 'com.github.node-gradle.node' version '3.3.0' 추가
+
+9. build.gradle 에 내용 추가 (front-end 같이 build 할 수 있도록 하는 코드)
+    node {
+        nodeModulesDir = file("$projectDir/front-end")
+        version = '18.3.0'
+        download = true
+    }
+
+    task npmBuild(type: NpmTask) {
+        args = ['run', "build"]
+    }
+
+    task copyFrontEnd(type: Copy) {
+        from "$projectDir/front-end/static"
+        into 'build/resources/main/static/.'
+    }
+
+    task cleanFrontEnd(type: Delete) {
+        delete "$projectDir/front-end/static", "$projectDir/front-end/node_modules"
+    }
+
+    npmBuild.dependsOn npmInstall
+    copyFrontEnd.dependsOn npmBuild
+    compileJava.dependsOn copyFrontEnd
+
+    clean.dependsOn cleanFrontEnd
+
+10. Heroku 회원가입
+
+11. Heroku 와 git pages 를 활용하며 main 브랜치에 푸쉬가 일어나면 자동으로 배포되게 만들기
+    11.1 Heroku 프로필로 들어가서 Account Setting 에 있는 API key 를 복사
+    11.2 생성해둔 git 레포의 settings 에 들어가서 Security -> Secrets and variables -> Actions 에서 New repository secret을 선택하여
+         11.1 에서 복사해둔 API key 를 넣어준다. 이름은 HEROKU_DEPLOY_KEY 로 짓는다.
+    11.3 프로젝트 최상단 폴더에 .github/workflow 폴더를 생성하고 deploy.yml 파일을 생성한 후 아래 코드 추가
+        # This will be used for authentication. You can find it in your heroku homepage account settings
+        heroku_api_key: ${{ secrets.HEROKU_DEPLOY_KEY }}
+        # Email that you use with heroku
+        heroku_email: kjy.devops@gmail.com
+        # The appname to use for deploying/updating
+        heroku_app_name: fc-simple-sns
+    11.4 프로젝트 최상단 폴더에 Procfile, system.properties 파일을 생성하고 아래 코드 추가
+        [Procfile]
+        web: java -Dserver.port=$PORT $JAVA_OPTS -jar build/libs/simple-sns-0.0.1-SNAPSHOT.jar
+
+        [system.properties]
+        java.runtime.version=11
+    11.5 front-end 코드 가져오기
+
+12. build.gradle 에 있는 security 를 잠시 주석처리하고 화면 잘 나오는지 확인
