@@ -67,4 +67,4 @@ gitignore.io 들어가서 intellij 관련 세개 추가, java, gradle 추가해�
         java.runtime.version=11
     11.5 front-end 코드 가져오기
 
-12. build.gradle 에 있는 security 를 잠시 주석처리하고 화면 잘 나오는지 확인
+12. build.gradle 에 있는 security 를 잠시 주석처리하고 화면 잘 나오는지 확인.
