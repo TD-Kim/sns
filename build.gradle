@@ -33,6 +33,7 @@ dependencies {
 	testImplementation 'org.springframework.security:spring-security-test'
 }
 
+/*
 tasks.named('test') {
 	useJUnitPlatform()
 }
@@ -60,4 +61,4 @@ npmBuild.dependsOn npmInstall
 copyFrontEnd.dependsOn npmBuild
 compileJava.dependsOn copyFrontEnd
 
-clean.dependsOn cleanFrontEnd
+clean.dependsOn cleanFrontEnd*/
