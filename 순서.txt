@@ -1,0 +1,18 @@
+0. 깃허브 레포 생성 후 깃 데스크탑으로 레포 클론
+
+1. 인텔리제이 다운로드
+
+2. 스프링부트 프로젝트 생성(spring web, jpa, spring security, lombok, postgreSQL driver 디펜던시 추가하고 다운로드)
+
+3. 다운로드 된 스프링부트 파일 내용 0번에서 클론한 레포로 복사 붙여넣기
+
+4. 인텔리제이에서 0번 레포 열기
+
+5. gitignore 파일 작성
+gitignore.io 들어가서 intellij 관련 세개 추가, java, gradle 추가해서 생성
+
+6. 스프링부트 프로젝트 실행하면 오류가남(자바 11버전으로 변경 안된것, DB 연동 url 없는것)
+    SnsApplication.java 파일에 @SpringBootApplication(exclude = DataSourceAutoConfiguration.class) 수정해주고 build.gradle 에
+    spring boot 버전 2.7.6, java 11 로 변경 후 Run application  다시 해본다.
+
+7. 성공하면 localhost:8080 들어가면 로그인 페이지가 뜨는데 스프링 시큐리티를 설정해놨기 때문에 모든 경로에 대해서 로그인을 하라고 자동으로 뜨기 때문
